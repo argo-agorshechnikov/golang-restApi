@@ -25,7 +25,7 @@ func NewUserRep(connStr string) (*UserRep, error) {
 	return &UserRep{db: db}, nil
 }
 
-func (r *UserRep) Create(user *models.User) error {
+func (r *UserRep) CreateUserRep(user *models.User) error {
 
 	query := `INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)`
 
