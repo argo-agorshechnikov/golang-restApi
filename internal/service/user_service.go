@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/argo-agorshechnikov/golang-restApi/internal/models"
 	"github.com/argo-agorshechnikov/golang-restApi/internal/repository"
@@ -31,5 +32,10 @@ func (s *UserService) CreateUserService(user *models.User) error {
 }
 
 func (s *UserService) GetUser(id string) (*models.User, error) {
+	newId, _ := strconv.Atoi(id)
+	if newId <= 0 {
+		return nil, errors.New("id cannot be <= 0")
+	}
+
 	return s.repo.GetUserByID(id)
 }
