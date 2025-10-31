@@ -31,7 +31,7 @@ func (s *UserService) CreateUserService(user *models.User) error {
 	return s.repo.CreateUserRep(user)
 }
 
-func (s *UserService) GetUser(id string) (*models.User, error) {
+func (s *UserService) GetUserService(id string) (*models.User, error) {
 	newId, _ := strconv.Atoi(id)
 	if newId <= 0 {
 		return nil, errors.New("id cannot be <= 0")
