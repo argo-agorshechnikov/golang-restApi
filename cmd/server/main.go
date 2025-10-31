@@ -1,26 +1,38 @@
 package main
 
 import (
-	"encoding/json"
+	"log"
 	"net/http"
+	"os"
+
+	"github.com/argo-agorshechnikov/golang-restApi/internal/handlers"
+	"github.com/argo-agorshechnikov/golang-restApi/internal/repository"
+	"github.com/argo-agorshechnikov/golang-restApi/internal/service"
 )
 
-
-
-func HelloHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-	response := "Hello!"
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
-}
-
-
-
 func main() {
-	http.HandleFunc("/hello", HelloHandler)
-	http.ListenAndServe(":8080", nil)
+
+	connStr := os.Getenv("DB_CONN_STR")
+	if connStr == "" {
+		log.Fatal("DB_CONN_STR env var is req")
+	}
+
+	userRepo, err := repository.NewUserRep(connStr)
+	if err != nil {
+		log.Fatalf("Failed to connect to DB: %v", err)
+	}
+
+	userService := service.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/users", userHandler.CreateUserHand)
+	mux.HandleFunc("/user", userHandler.GetUserByIdHand)
+
+	addr := ":8080"
+	log.Printf("Server running")
+	err = http.ListenAndServe(addr, mux)
+	if err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }
