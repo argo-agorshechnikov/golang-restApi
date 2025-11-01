@@ -25,7 +25,7 @@ func NewProductRep(connStr string) (*ProductRep, error) {
 
 func (r *ProductRep) CreateProductRep(product *models.Product) error {
 
-	query := "INSERT INTO products(id, name, description) VALUES ($1, $2, $3)"
+	query := "INSERT INTO products(id, name, price, description) VALUES ($1, $2, $3, $4)"
 
 	_, err := r.db.Exec(query, product.ID, product.Name, product.Description)
 	return err
