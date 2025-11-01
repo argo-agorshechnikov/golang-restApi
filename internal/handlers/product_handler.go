@@ -40,3 +40,24 @@ func (p *ProductHandler) CreateProductHandler (w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(product)
 }
+
+
+func (p *ProductHandler) GetProductByIdHandler (w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "incorrect data format(id)", http.StatusBadRequest)
+	}
+
+	product, err := p.productService.GetProductByIdService(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(product)
+}
