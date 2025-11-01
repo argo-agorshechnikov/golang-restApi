@@ -37,7 +37,7 @@ func main() {
 	mux.HandleFunc("/users", userHandler.CreateUserHand)
 	mux.HandleFunc("/user", userHandler.GetUserByIdHand)
 	mux.HandleFunc("/products", productHandler.CreateProductHandler)
-	mux.HandleFunc("product", productHandler.GetProductByIdHandler)
+	mux.HandleFunc("/product", productHandler.GetProductByIdHandler)
 
 	addr := ":8080"
 	log.Printf("Server running")
